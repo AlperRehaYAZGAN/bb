@@ -4,7 +4,7 @@ RUN yum install -y yum-utils
 
 RUN yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-RUN yum install -y https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-20.10.18-3.el7.x86_64.rpm https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-cli-20.10.18-3.el7.x86_64.rpm https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.6.7-3.1.el7.x86_64.rpm https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-compose-plugin-2.10.2-3.el7.x86_64.rpm
+RUN yum install -y yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 ENV DEBUG=false
 
