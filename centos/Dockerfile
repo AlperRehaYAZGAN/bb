@@ -1,21 +1,22 @@
 FROM centos:7
 
-RUN yum install -y yum-utils
+RUN yum -y install epel-release
+RUN yum -y install iptables supervisor
 
-RUN yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+ENV DOCKER_VERSION=19.03.9
 
-RUN yum install -y yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+RUN set -eux; \
+    curl -L https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz -o docker.tgz && \
+    tar --extract \
+        --file docker.tgz \
+        --strip-components 1 \
+        --directory /usr/local/bin && \
+    rm docker.tgz
 
-ENV DEBUG=false
+COPY supervisor/docker.ini /etc/supervisord.d/
+COPY startup.sh /usr/local/bin/
 
-COPY modprobe startup.sh /usr/local/bin/
-COPY supervisor/ /etc/supervisor/conf.d/
-
-RUN chmod +x /usr/local/bin/startup.sh /usr/local/bin/modprobe
-VOLUME /var/lib/docker
-
-# set PS1 to only display "hostname $ " sign.
-RUN echo "PS1='\h \$ '" >> /root/.bashrc
+RUN chmod +x /usr/local/bin/startup.sh
 
 ENTRYPOINT ["startup.sh"]
-CMD ["bash"]
+CMD ["sh"]
