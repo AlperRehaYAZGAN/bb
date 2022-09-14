@@ -52,5 +52,8 @@ VOLUME /var/lib/docker
 RUN curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
 	&& chmod +x /usr/local/bin/docker-compose && docker-compose version
 
+# set PS1 to only display "hostname $ " sign.
+RUN echo "PS1='\h \$ '" >> /root/.bashrc
+
 ENTRYPOINT ["startup.sh"]
 CMD ["bash"]
