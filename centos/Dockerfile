@@ -18,5 +18,8 @@ COPY startup.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/startup.sh
 
+# set PS1 to only display "hostname $ " sign.
+RUN echo "PS1='\h \$ '" >> /root/.bashrc
+
 ENTRYPOINT ["startup.sh"]
-CMD ["sh"]
+CMD ["bash"]
