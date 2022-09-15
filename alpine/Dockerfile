@@ -1,9 +1,8 @@
 FROM alpine:3.15
 
-RUN apk upgrade --available  \
-    && apk add -y ca-certificates openssh-client \
-    wget curl iptables supervisor \
-    && rm -rf /var/lib/apk/list/*
+RUN apk update
+RUN apk add -y --no-cache ca-certificates openssh-client wget curl iptables supervisor \
+RUN rm -rf /var/lib/apk/list/*
 
 ENV DOCKER_CHANNEL=stable \
 	DOCKER_VERSION=20.10.18 \
