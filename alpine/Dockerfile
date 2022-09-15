@@ -1,10 +1,5 @@
 FROM alpine:3.15
 
-FROM alpine:3.15
-
-# Install the magic wrapper.
-ADD ./wrapdocker /usr/local/bin/wrapdocker
-
 # Install Docker and dependencies
 RUN apk --update add \
   bash \
@@ -13,7 +8,6 @@ RUN apk --update add \
   e2fsprogs \
   docker \
   openssh-client wget curl iptables supervisor \
-  && chmod +x /usr/local/bin/wrapdocker \
   && rm -rf /var/cache/apk/*
 
 
@@ -35,4 +29,4 @@ VOLUME /var/lib/docker
 # set PS1 to only display "hostname $ " sign.
 RUN echo "PS1='\h \$ '" >> /root/.bashrc
 
-CMD ["wrapdocker","dind", "docker", "daemon","bash"]
+CMD ["dind", "docker", "daemon","bash"]
