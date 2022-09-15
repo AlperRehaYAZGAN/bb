@@ -29,8 +29,8 @@ COPY ./docker.service /usr/lib/systemd/system/
 
 COPY motd /etc/motd
 
-RUN echo $"cat /etc/motd \n\
-export PS1='\h \$ '" >> /root/.bash_profile
+RUN echo $'cat /etc/motd \n\
+export PS1=\'\h \$ \'' >> /root/.bash_profile
 
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc \
     && kubectl completion bash >> /etc/bash_completion.d/kubectl
