@@ -1,7 +1,7 @@
 FROM alpine:3.15
 
 RUN apk update
-RUN apk add -y --no-cache ca-certificates openssh-client wget curl iptables supervisor \
+RUN apk add --no-cache ca-certificates openssh-client wget curl iptables supervisor
 RUN rm -rf /var/lib/apk/list/*
 
 ENV DOCKER_CHANNEL=stable \
@@ -39,7 +39,8 @@ RUN set -eux; \
 	dockerd --version; \
 	docker --version
 
-COPY modprobe startup.sh /usr/local/bin/
+COPY modprobe /usr/local/bin/
+COPY startup.sh /usr/local/bin/
 COPY supervisor/ /etc/supervisor/conf.d/
 
 RUN chmod +x /usr/local/bin/startup.sh /usr/local/bin/modprobe
