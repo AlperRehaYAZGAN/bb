@@ -52,5 +52,5 @@ RUN curl -L "https://github.com/docker/compose/releases/download/v2.10.1/docker-
 # set PS1 to only display "hostname $ " sign.
 RUN echo "PS1='\h \$ '" >> /root/.bashrc
 
-ENTRYPOINT ["startup.sh"]
+ENTRYPOINT ["/usr/local/bin/startup.sh"]
 CMD ["bash"]
