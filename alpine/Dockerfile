@@ -1,59 +1,38 @@
 FROM alpine:3.15
 
-RUN apk update
-RUN apk add --no-cache ca-certificates openssh-client wget curl iptables supervisor
-RUN rm -rf /var/lib/apk/list/*
+FROM alpine:3.15
 
-ENV DOCKER_CHANNEL=stable \
-	DOCKER_VERSION=20.10.18 \
-	DEBUG=false
+# Install the magic wrapper.
+ADD ./wrapdocker /usr/local/bin/wrapdocker
 
-# Docker installation
-RUN set -eux; \
-	\
-	arch="$(uname --m)"; \
-	case "$arch" in \
-        # amd64
-		x86_64) dockerArch='x86_64' ;; \
-        # arm32v6
-		armhf) dockerArch='armel' ;; \
-        # arm32v7
-		armv7) dockerArch='armhf' ;; \
-        # arm64v8
-		aarch64) dockerArch='aarch64' ;; \
-		*) echo >&2 "error: unsupported architecture ($arch)"; exit 1 ;;\
-	esac; \
-	\
-	if ! wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/${dockerArch}/docker-${DOCKER_VERSION}.tgz"; then \
-		echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
-		exit 1; \
-	fi; \
-	\
-	tar --extract \
-		--file docker.tgz \
-		--strip-components 1 \
-		--directory /usr/local/bin/ \
-	; \
-	rm docker.tgz; \
-	\
-	dockerd --version; \
-	docker --version
+# Install Docker and dependencies
+RUN apk --update add \
+  bash \
+  iptables \
+  ca-certificates \
+  e2fsprogs \
+  docker \
+  openssh-client wget curl iptables supervisor \
+  && chmod +x /usr/local/bin/wrapdocker \
+  && rm -rf /var/cache/apk/*
 
-# mkdir /usr/local/bin/
-RUN mkdir -p /usr/local/bin/
-COPY modprobe /usr/local/bin/
-COPY startup.sh /usr/local/bin/
-COPY supervisor/ /etc/supervisor/conf.d/
 
-RUN chmod +x /usr/local/bin/startup.sh /usr/local/bin/modprobe
-VOLUME /var/lib/docker
+
+# Define additional metadata for our image.
 
 # Docker compose installation
 RUN curl -L "https://github.com/docker/compose/releases/download/v2.10.1/docker-compose-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)" -o /usr/local/bin/docker-compose \
 	&& chmod +x /usr/local/bin/docker-compose && docker-compose version
 
+RUN apk-install docker bash \
+    && curl -sL https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-1.12.6.tgz | tar -xz -C /usr/local/bin --strip-components=1 \
+    && chmod +x /usr/bin/docker \
+    && curl -sL https://github.com/docker/docker/raw/master/hack/dind > /usr/local/bin/dind \
+    && chmod +x /usr/local/bin/dind
+
+VOLUME /var/lib/docker
+
 # set PS1 to only display "hostname $ " sign.
 RUN echo "PS1='\h \$ '" >> /root/.bashrc
 
-ENTRYPOINT ["startup.sh"]
-CMD ["bash"]
+CMD ["wrapdocker","dind", "docker", "daemon","bash"]
