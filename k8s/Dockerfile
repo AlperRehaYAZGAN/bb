@@ -17,7 +17,8 @@ RUN curl -Lf -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-
     && chmod +x /usr/bin/jq /usr/bin/docker-compose 
 
 
-VOLUME ["/var/lib/kubelet"]
+# kubelet changed to docker
+VOLUME ["/var/lib/docker"]
 
 COPY ./kube* /etc/systemd/system/
 COPY ./wrapkubeadm.sh /usr/local/bin/kubeadm
@@ -28,8 +29,8 @@ COPY ./docker.service /usr/lib/systemd/system/
 
 COPY motd /etc/motd
 
-RUN echo $'cat /etc/motd \n\
-export PS1="[\h \W]$ "' >> /root/.bash_profile
+RUN echo $"cat /etc/motd \n\
+export PS1='\h \$ '" >> /root/.bash_profile
 
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc \
     && kubectl completion bash >> /etc/bash_completion.d/kubectl
