@@ -46,7 +46,7 @@ RUN chmod +x /usr/local/bin/startup.sh /usr/local/bin/modprobe
 VOLUME /var/lib/docker
 
 # Docker compose installation
-RUN curl -L "https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+RUN curl -L "https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)" -o /usr/local/bin/docker-compose \
 	&& chmod +x /usr/local/bin/docker-compose && docker-compose version
 
 # set PS1 to only display "hostname $ " sign.
