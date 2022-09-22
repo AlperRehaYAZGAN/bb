@@ -54,5 +54,7 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOS
 # set PS1 to only display "hostname $ " sign.
 RUN echo "PS1='\h \$ '" >> /root/.bashrc
 
+ENV SHELL=/bin/bash
+
 ENTRYPOINT ["startup.sh"]
 CMD ["bash"]
