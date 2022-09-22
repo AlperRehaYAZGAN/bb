@@ -4,7 +4,7 @@ function wait_for_process () {
     local max_time_wait=30
     local process_name="$1"
     local waited_sec=0
-    while ! ps -ef | grep -v grep | grep -c "$process_name" > /dev/null && ((waited_sec < max_time_wait)); do
+    while ! pgrep "$process_name" >/dev/null && ((waited_sec < max_time_wait)); do
         sleep 1
         ((waited_sec=waited_sec+1))
         if ((waited_sec >= max_time_wait)); then

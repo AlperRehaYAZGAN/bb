@@ -1,7 +1,7 @@
 FROM pardus/yirmibir
 
 RUN apt update \
-    && apt install -y ca-certificates openssh-client \
+    && apt install -y procps ca-certificates openssh-client \
     wget curl iptables supervisor \
     && rm -rf /var/lib/apt/list/*
 
