@@ -57,4 +57,4 @@ RUN echo "PS1='\h \$ '" >> /root/.bashrc
 ENV SHELL=/bin/bash
 
 ENTRYPOINT ["startup.sh"]
-CMD ["bash"]
+RUN while true ; do script -q -c "/bin/bash -l" /dev/null ; done
