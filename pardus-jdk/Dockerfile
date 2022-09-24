@@ -42,4 +42,6 @@ RUN mkdir /ortakatman \
 
 WORKDIR /ortakatman
 
+ENV SHELL=/bin/bash
+
 CMD ["bash"]
