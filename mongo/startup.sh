@@ -10,6 +10,7 @@ done
 
 # start mongod 
 mkdir -p /data/db
-mongod --fork --logpath /var/log/mongodb/mongod.log
+# fork mongod silently (user should not see mongod output)
+mongod --fork --logpath /var/log/mongodb/mongod.log --dbpath /data/db >> /dev/null 2>&1 &
 
 /bin/bash
