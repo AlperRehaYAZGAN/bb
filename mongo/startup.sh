@@ -8,4 +8,8 @@ while ! pgrep "$process_name" > /dev/null 2>&1 ; do
     sleep 1
 done
 
+# start mongod 
+mkdir -p /data/db
+mongod --fork --logpath /var/log/mongodb/mongod.log
+
 /bin/bash
