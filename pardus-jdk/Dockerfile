@@ -19,9 +19,9 @@ ENV TERM=xterm \
 
 ADD ./motd /etc/motd
 
-RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' \
-    >> /etc/bash.bashrc \
-    && echo "$(cat /etc/os-release | awk 'NR==2, NR==5{print}')" >> /etc/motd
+# RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' \
+#     >> /etc/bash.bashrc \
+#     && echo "$(cat /etc/os-release | awk 'NR==2, NR==5{print}')" >> /etc/motd
 
 RUN apt -y update \
     && apt -y upgrade
